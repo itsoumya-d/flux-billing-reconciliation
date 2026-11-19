@@ -180,3 +180,4 @@ export function eventStream(reads: IntervalRead[], result: Reconciliation): Bill
     { type: "BillReconciled", at: new Date().toISOString(), payload: { variance: result.variance, flags: result.flags } },
   ];
 }
+export * from "./split_settlement.js";
