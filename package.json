@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "vitest run",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "lint": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/node": "^22.13.10",

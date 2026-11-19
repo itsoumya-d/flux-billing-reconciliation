@@ -44,6 +44,11 @@ footer{display:flex;justify-content:space-between;gap:16px;margin-top:24px;paddi
 <footer><span>IBM Plex Sans · Inter · #050C2F · #0B30B0 · 25px buttons</span><span>Reference implementation for Flux Federation</span></footer></div></body></html>`;
 
 createServer((request, response) => {
+  if (request.url === "/health") {
+    response.writeHead(200, { "content-type": "application/json" });
+    response.end(JSON.stringify({ status: "ok", service: "flux-billing-reconciliation" }));
+    return;
+  }
   if (request.url === "/api/settlement/reconcile") {
     const demoItems = [
       { id: "srv-1", description: "Multi-party Service", amount: 150, merchantId: "m-1", staffId: "s-1", commissionRatePercent: 40 },
