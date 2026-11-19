@@ -1,5 +1,5 @@
 import { createServer } from "node:http";
-import { reconcile, type InvoiceLine, type IntervalRead, type Tariff } from "./engine.js";
+import { reconcile, reconcileSplitSettlement, type InvoiceLine, type IntervalRead, type Tariff } from "./engine.js";
 
 const tariff: Tariff = {
   dailyFixed: 2.5,
@@ -44,6 +44,17 @@ footer{display:flex;justify-content:space-between;gap:16px;margin-top:24px;paddi
 <footer><span>IBM Plex Sans · Inter · #050C2F · #0B30B0 · 25px buttons</span><span>Reference implementation for Flux Federation</span></footer></div></body></html>`;
 
 createServer((request, response) => {
+  if (request.url === "/api/settlement/reconcile") {
+    const demoItems = [
+      { id: "srv-1", description: "Multi-party Service", amount: 150, merchantId: "m-1", staffId: "s-1", commissionRatePercent: 40 },
+      { id: "ret-1", description: "Retail Item", amount: 50, merchantId: "m-1" },
+    ];
+    const demoPayment = { type: "card" as const, processingFeePercent: 1.5, fixedFeeAmount: 0.2 };
+    const settlement = reconcileSplitSettlement("b-demo", demoItems, demoPayment, 2.5);
+    response.writeHead(200, { "content-type": "application/json" });
+    response.end(JSON.stringify(settlement));
+    return;
+  }
   if (request.url === "/api/reconciliation") {
     response.writeHead(200, { "content-type": "application/json" });
     response.end(JSON.stringify(result));
